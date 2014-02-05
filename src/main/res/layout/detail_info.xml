@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright (C) 2014 Szu-Hsien Lee (misgod.tw@gmail.com)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+        >
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:id="@+id/container"
+            >
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:paddingBottom="5dp"
+                        android:background="@drawable/card_bg">
+
+            <ImageView android:id="@+id/cover"
+                       android:layout_marginTop="1dp"
+                       android:scaleType="fitCenter"
+                       android:adjustViewBounds="true"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_alignParentTop="true"
+                       android:layout_centerHorizontal="true"
+                       android:padding="1dp"
+                       android:background="#ff6f6f6f"
+                    />
+            <!--android:maxHeight="200dp"-->
+
+            <TextView android:id="@+id/title"
+                      android:textSize="18sp"
+                      android:textStyle="bold"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:paddingLeft="8dp"
+                      android:layout_below="@id/cover"
+                    />
+
+            <TextView android:id="@+id/description"
+                      android:textSize="16sp"
+                      android:lineSpacingMultiplier="1.2"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@id/title"
+                      android:padding="8dp"
+                      android:text="@string/no_description"
+                    />
+        </RelativeLayout>
+
+
+        <TextView style="@style/label_subject"
+                  android:text="@string/event_info_label"/>
+
+        <GridLayout
+                style="@style/card_grid">
+
+
+            <TextView android:id="@+id/lab_event_date"
+                      style="@style/label_item"
+                      android:text="@string/eventdate"
+                    />
+
+            <TextView android:id="@+id/event_date"
+                      style="@style/text_item"
+                    />
+
+
+            <TextView android:id="@+id/lab_discount"
+                      style="@style/label_item"
+                      android:text="@string/discount_info_field"
+                    />
+
+
+            <TextView android:id="@+id/discount"
+                      style="@style/text_item"
+                    />
+
+            <TextView android:id="@+id/lab_eventsource"
+                      style="@style/label_item"
+                      android:text="@string/eventsource"
+                    />
+
+            <TextView android:id="@+id/eventsource"
+                      style="@style/text_item"
+                    />
+            <TextView android:id="@+id/lab_eventweb"
+                      style="@style/label_item"
+                      android:text="@string/eventweb"
+                    />
+
+            <TextView android:id="@+id/eventweb"
+                      android:autoLink="web"
+                      style="@style/text_item"
+                    />
+
+            <TextView android:id="@+id/lab_event_contact"
+                      style="@style/label_item"
+                      android:text="@string/event_contact"
+                    />
+
+            <TextView android:id="@+id/event_contact"
+                      android:autoLink="all"
+                      style="@style/text_item"
+                    />
+
+        </GridLayout>
+
+
+        <TextView style="@style/label_subject"
+                  android:text="@string/event_unit_label"/>
+
+
+        <GridLayout style="@style/card_grid">
+
+
+            <TextView android:id="@+id/lab_showunit"
+                      style="@style/label_item"
+                      android:text="@string/showunit"
+                    />
+
+            <TextView android:id="@+id/showunit"
+                      style="@style/text_item"
+                    />
+
+
+            <TextView android:id="@+id/lab_masterunit"
+                      style="@style/label_item"
+                      android:text="@string/masterunit"
+                    />
+
+
+            <TextView android:id="@+id/masterunit"
+                      android:autoLink="phone|web"
+                      style="@style/text_item"
+                    />
+
+            <TextView android:id="@+id/lab_subunit"
+                      style="@style/label_item"
+                      android:text="@string/subunit"
+                    />
+
+            <TextView android:id="@+id/subunit"
+                      android:autoLink="phone|web"
+                      style="@style/text_item"
+                    />
+            <TextView android:id="@+id/lab_supportunit"
+                      style="@style/label_item"
+                      android:text="@string/supportunit"
+                    />
+
+            <TextView android:id="@+id/supportunit"
+                      android:autoLink="phone|web"
+                      style="@style/text_item"
+                    />
+
+            <TextView android:id="@+id/lab_otherunit"
+                      style="@style/label_item"
+                      android:text="@string/otherunit"
+                    />
+
+            <TextView android:id="@+id/otherunit"
+                      android:autoLink="phone|web"
+                      style="@style/text_item"
+                    />
+
+        </GridLayout>
+
+        <TextView style="@style/label_subject"
+                  android:text="@string/eventshow_label"/>
+
+
+        <GridLayout
+                android:id="@+id/show_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:useDefaultMargins="true"
+                android:alignmentMode="alignBounds"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:columnCount="2"/>
+
+
+    </LinearLayout>
+</ScrollView>

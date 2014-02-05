@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright (C) 2014 Szu-Hsien Lee (misgod.tw@gmail.com)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/card_grid">
+
+
+    <TextView android:id="@+id/lab_show_time"
+              style="@style/label_item"
+              android:text="@string/show_time"
+              android:singleLine="true"
+            />
+
+    <TextView android:id="@+id/show_time"
+              style="@style/text_item"
+              android:lineSpacingMultiplier="1.5"
+            />
+
+
+    <TextView android:id="@+id/lab_locationName"
+              style="@style/label_item"
+              android:singleLine="true"
+              android:text="@string/show_location_name"
+            />
+
+
+    <TextView android:id="@+id/locationName"
+              style="@style/text_item"
+              android:lineSpacingMultiplier="1.5"
+            />
+
+    <TextView android:id="@+id/lab_location"
+              style="@style/label_item"
+              android:singleLine="true"
+              android:text="@string/show_location"
+            />
+
+    <TextView android:id="@+id/location"
+              style="@style/text_item"
+              android:lineSpacingMultiplier="1.5"
+            />
+    <TextView android:id="@+id/lab_price"
+              style="@style/label_item"
+              android:singleLine="true"
+              android:text="@string/show_price"
+            />
+
+    <TextView android:id="@+id/price"
+              android:autoLink="phone|web"
+              style="@style/text_item"
+              android:lineSpacingMultiplier="1.5"
+            />
+
+
+</GridLayout>

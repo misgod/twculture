@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright (C) 2014 Szu-Hsien Lee (misgod.tw@gmail.com)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<resources>
+
+    <style name="Theme" parent="Theme.AppCompat.Light">
+        <item name="android:windowBackground">@color/window_bg</item>
+    </style>
+
+    <style name="label_subject">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+
+    <style name="label_item">
+        <item name="android:padding">1dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lines">2</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#cccccc</item>
+        <item name="android:shadowColor">#333333</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:background">#0000CC</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="text_item">
+       <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">0dp</item> <!--0dp workaround for wrap problem on textview inner GridLayout-->
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">fill</item> <!--fill_horizontal with above workaround-->
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="card_grid">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:useDefaultMargins">true</item>
+        <item name="android:alignmentMode">alignBounds</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:background">@drawable/round_card_bg</item>
+        <item name="android:columnCount">2</item>
+    </style>
+</resources>

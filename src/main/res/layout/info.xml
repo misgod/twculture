@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright (C) 2014 Szu-Hsien Lee (misgod.tw@gmail.com)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dip"
+                    android:paddingTop="4dip"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginBottom="5dip"
+                    android:background="@drawable/card_bg">
+
+
+        <TextView android:id="@+id/locations"
+                  android:textSize="12sp"
+                  android:textStyle="bold"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentRight="true"
+                  android:layout_alignParentTop="true"
+                  android:textColor="#ffe5e5e5"
+                  android:background="#ff2f72ee"
+                  android:padding="1dip"
+                  android:shadowDx="1"
+                  android:shadowDy="2"
+                  android:shadowColor="#333333"
+                  android:shadowRadius="1"
+                  android:layout_alignTop="@id/title"
+                />
+
+
+
+        <TextView
+                android:id="@+id/more"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="5dip"
+                android:text="..."
+                />
+
+
+        <ImageView android:id="@+id/cover"
+                   android:scaleType="fitXY"
+                   android:layout_width="82dip"
+                   android:padding="1dp"
+                   android:layout_height="82dip"
+                   android:layout_marginRight="5dip"
+                   android:background="#ff6f6f6f"
+                   android:layout_below="@id/title"/>
+
+        <TextView android:id="@+id/title"
+                  android:textSize="16sp"
+                  android:textStyle="bold"
+                  android:singleLine="true"
+                  android:ellipsize="marquee"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_toLeftOf="@id/locations"
+                />
+
+        <TextView android:id="@+id/free"
+                  android:textSize="12sp"
+                  android:textStyle="bold"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/title"
+                  android:layout_toRightOf="@id/cover"
+                  android:layout_alignTop="@id/cover"
+                  android:layout_marginTop="5dip"
+                  android:padding="1dip"
+                  android:textColor="#eeeeee"
+                  android:background="#00ff00"
+                  android:shadowColor="#333333"
+                  android:shadowDx="2"
+                  android:shadowDy="2"
+                  android:shadowRadius="1"
+                />
+
+
+        <TextView android:id="@+id/showunit"
+                  android:textSize="14sp"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_toRightOf="@id/free"
+                  android:layout_below="@id/title"
+                  android:layout_marginLeft="5dip"
+                  android:maxLines="2"
+                  android:layout_alignTop="@id/free"
+                />
+
+        <TextView android:id="@+id/showdate"
+                  android:textSize="16sp"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_toRightOf="@id/cover"
+                  android:layout_alignParentBottom="true"
+                  android:layout_marginTop="5dip"
+                />
+
+
+    </RelativeLayout>
+</FrameLayout>
