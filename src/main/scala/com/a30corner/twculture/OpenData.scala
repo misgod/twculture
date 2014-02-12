@@ -15,7 +15,6 @@
 */
 
 
-
 package com.a30corner.twculture
 
 
@@ -24,17 +23,16 @@ import com.a30corner.twculture.util.LogUtil._
 import java.io._
 
 import android.util.JsonReader
-import scala.collection.mutable.{ListBuffer, ArrayBuffer}
-import com.a30corner.twculture.util.DownloadHelper
+import scala.collection.mutable.ArrayBuffer
 import scala.Some
 import android.text.TextUtils
-
-
-import ExecutionContext.Implicits.global
 import android.content.Context
 
+import ExecutionContext.Implicits.global
 
-case class Category(code: Int, name: String)
+
+
+case class Category(code: String, name: String, url:String="")
 
 case class Info(UID: String,
                 category: String,
@@ -62,12 +60,41 @@ case class Info(UID: String,
 case class ShowInfo(
                      lat: Double,
                      lon: Double,
-                     location: String,
+                     location: Option[String],
                      locationName: String,
                      onSales: Boolean,
                      price: Option[String],
                      time: String
                      )
+
+
+
+case class Place(
+                  groupTypeName: String,
+                  mainTypeName: String,
+                  mainTypePk: String,
+                  name: String,
+                  typename: Option[String], //古蹟、歷史建築....
+                  level: Option[String], //直轄市定古蹟、國定古蹟
+                  representImage: Option[String], //代表圖像連結 http://cloud.culture.jpg
+                  intro: String,
+                  cityName: String,
+                  address: String,
+                  arriveWay: Option[String],
+                  latitude: Double,
+                  longitude: Double,
+                  openTime: String,
+                  ticketPrice: String,
+                  contact: Option[String],
+                  phone: Option[String],
+                  fax: Option[String],
+                  email: Option[String],
+                  website: Option[String],
+                  srcWebsite: Option[String]
+                  )
+
+
+
 
 object OpenData {
 
@@ -91,6 +118,16 @@ object OpenData {
     } yield json2seq(reader)(json2info)
   }
 
+  def getPlacesType:Seq[Category]= ICulture.placesCategory
+
+
+  def getPlaces(c: Category)(implicit ctx: Context): Future[Seq[Place]] = {
+    D(TAG, s"getDetail: $c")
+
+    for {
+      reader <- ICulture.getPlace(c.url)
+    } yield json2seq(reader, true)(json2place)
+  }
 }
 
 
@@ -207,11 +244,11 @@ object JSonConvert {
 
   def json2category(reader: JsonReader): Category = {
     reader.beginObject()
-    var code: Int = 0
+    var code: String = "0"
     var name: String = ""
     while (reader.hasNext) {
       reader.nextName match {
-        case "categoryCode" => code = reader.nextInt
+        case "categoryCode" => code = reader.nextString
         case "categoryName" => name = reader.nextString
         case _ => reader.skipValue()
       }
@@ -225,34 +262,101 @@ object JSonConvert {
 
     var lat: Double = 0
     var lon: Double = 0
-    var location: String = ""
+    var location: Option[String] = None
     var locationName: String = ""
     var onSales: Boolean = false
     var price: Option[String] = None
     var time: String = ""
 
     while (reader.hasNext) {
-      try{
+      try {
         reader.nextName match {
           case "latitude" => lat = reader.nextDouble //FIXME:  java.lang.NumberFormatException: Invalid double: ""
           case "longitude" => lon = reader.nextDouble
-          case "location" => location = reader.nextString
+          case "location" => location = opt(reader.nextString)
           case "locationName" => locationName = reader.nextString
           case "onSales" => onSales = reader.nextString == "Y"
           case "price" => price = Some(reader.nextString)
           case "time" => time = reader.nextString
           case _ => reader.skipValue()
         }
-      }catch{
-        case e:Exception =>
-          W(TAG,e,e.getMessage)
-          reader.skipValue()  //skip thi parseinge problem to keep
+      } catch {
+        case e: Exception =>
+          W(TAG, e, e.getMessage)
+          reader.skipValue() //skip thi parseinge problem to keep
       }
 
     }
     reader.endObject()
 
     new ShowInfo(lat, lon, location, locationName, onSales, price, time)
+  }
+
+
+  def json2place(reader: JsonReader): Place = {
+    reader.beginObject()
+
+    var groupTypeName: String = ""
+    var mainTypeName: String = ""
+    var mainTypePk: String = ""
+    var name: String = ""
+    var typename: Option[String] = None
+    var level: Option[String] = None
+    var representImage: Option[String] = None
+    var intro: String = ""
+    var cityName: String = ""
+    var address: String = ""
+    var arriveWay:Option[String] = None
+    var latitude: Double = 0
+    var longitude: Double = 0
+    var openTime: String = ""
+    var ticketPrice: String = ""
+    var contact: Option[String] = None
+    var phone: Option[String] = None
+    var fax: Option[String] = None
+    var email: Option[String] = None
+    var website: Option[String] = None
+    var srcWebsite: Option[String] = None
+
+    while (reader.hasNext) {
+      try {
+        reader.nextName match {
+          case "groupTypeName" => groupTypeName = reader.nextString
+          case "mainTypeName" => mainTypeName = reader.nextString
+          case "mainTypePk" => mainTypePk = reader.nextString
+          case "name" => name = reader.nextString
+          case "typename" => typename = opt(reader.nextString)
+          case "level" => level = opt(reader.nextString)
+          case "representImage" => representImage = opt(reader.nextString)
+          case "intro" => intro = reader.nextString
+          case "cityName" => cityName = reader.nextString
+          case "address" => address = reader.nextString
+          case "arriveWay" => arriveWay = opt(reader.nextString)
+          case "latitude" => latitude = reader.nextDouble
+          case "longitude" => longitude = reader.nextDouble
+          case "openTime" => openTime = reader.nextString
+          case "ticketPrice" => ticketPrice = reader.nextString
+          case "contact" => contact = opt(reader.nextString)
+          case "phone" => phone = opt(reader.nextString)
+          case "fax" => fax = opt(reader.nextString)
+          case "email" => email = opt(reader.nextString)
+          case "website" => website = opt(reader.nextString)
+          case "srcWebsite" => srcWebsite = opt(reader.nextString)
+          case _ => reader.skipValue()
+        }
+      } catch {
+        case e: Exception =>
+          W(TAG, e, e.getMessage)
+          reader.skipValue() //skip thi parseinge problem to keep
+      }
+
+    }
+    reader.endObject()
+
+
+    new Place(groupTypeName, mainTypeName, mainTypePk, name, typename, level, representImage,
+      intro, cityName, address, arriveWay,latitude, longitude, openTime, ticketPrice, contact, phone,
+      fax, email, website, srcWebsite)
   }
 
 

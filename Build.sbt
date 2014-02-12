@@ -54,7 +54,7 @@ proguardOptions in Android ++= Seq(
 
 //libraryDependencies += "com.android.support" % "gridlayout-v7" % "18.0.0"
 
-libraryDependencies += "com.android.support" % "appcompat-v7" % "18.0.0"
+//libraryDependencies += "com.android.support" % "appcompat-v7" % "18.0.0"
 
 libraryDependencies += "com.nostra13.universalimageloader" % "universal-image-loader" % "1.9.0"
 

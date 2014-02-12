@@ -19,6 +19,7 @@
 <resources>
     <string name="app_name">台灣藝文資訊</string>
     <string name="event_category">藝文活動</string>
+    <string name="place_category">文化設施</string>
     <string name="showunit">演出\n單位</string>
     <string name="masterunit">主辦\n單位</string>
     <string name="subunit">承辦\n單位</string>
@@ -35,6 +36,7 @@
     <string name="show_price">票價</string>
     <string name="update_faile">無法取得資料!!</string>
     <string name="loading">資料載入中…</string>
+    <string name="loadingod">從文化部取回資料…</string>
     <string name="eventsource">資料\n來源</string>
     <string name="eventweb">活動\n網站</string>
     <string name="event_contact">官方\n網站</string>

@@ -16,23 +16,36 @@
 
 package com.a30corner.twculture
 
-import android.support.v4.app.{FragmentTransaction, Fragment}
 
 import android.os.Bundle
+import android.app.{FragmentTransaction, Fragment, Activity}
 import android.view.View
-import android.support.v7.app.ActionBarActivity
+
+import com.a30corner.twculture.util.LogUtil._
 
 
-class CategoryActivity extends ActionBarActivity {
+class HostActivity extends Activity {
 
   override def onCreate(savedState: Bundle) {
     super.onCreate(savedState)
     setContentView(R.layout.main)
 
-    if (savedState == null) {
-      change(new CategoryFragment, stack = false)
-    } else {
-      //do nothing
+
+    getIntent.getAction match {
+      case "twcultire.intent.action.EVENT" =>
+        setTitle(getString(R.string.event_category))
+        if (savedState == null) {
+          change(new CategoryFragment, stack = false)
+        }
+
+      case "twcultire.intent.action.PLACE" =>
+        setTitle(getString(R.string.place_category))
+        if (savedState == null) {
+          change(new PlaceTypeFragment, stack = false)
+        }
+
+      case a => E(TAG,a)
+
     }
 
   }
@@ -43,11 +56,11 @@ class CategoryActivity extends ActionBarActivity {
   )
 
 
-  def setTitle(title: String): Unit =  getSupportActionBar.setTitle(title)
+  def setTitle(title: String): Unit = getActionBar.setTitle(title)
 
 
   def change(f: Fragment, stack: Boolean = true): Unit = {
-    val transaction = getSupportFragmentManager.beginTransaction()
+    val transaction = getFragmentManager.beginTransaction()
     transaction.replace(R.id.container, f)
     if (stack) {
       transaction.addToBackStack(null)

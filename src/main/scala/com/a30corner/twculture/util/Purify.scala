@@ -63,8 +63,8 @@ object Purify {
       case Some(x) =>
         val d = date.trim.split("\\s", 2)
 
-        //11:59:00 is a trick to represent no time infomation or whole day
-        val time = if (d(1) == "23:59:00") "" else d(1)
+        //11:59:00 & 00:00:00 is a trick to represent no time infomation or whole day
+        val time = if (d(1) == "23:59:00" || d(1) == "00:00:00") "" else d(1)
 
 
         s"($x) ${d(0)} $time"

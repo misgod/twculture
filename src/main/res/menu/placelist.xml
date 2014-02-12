@@ -16,18 +16,16 @@
  limitations under the License.
 -->
 
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/gridview"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:columnWidth="90dp"
-          android:numColumns="3"
-          android:verticalSpacing="30dp"
-          android:horizontalSpacing="10dp"
-          android:stretchMode="columnWidth"
-          android:gravity="center"
-          android:background="@drawable/category_bg"
-        />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
+    <item android:id="@+id/action_map"
+          android:icon="@drawable/ic_menu_mapmode"
+          android:showAsAction="always" />
 
+    <item android:id="@+id/action_location"
+          android:showAsAction="always"
+          android:actionLayout="@layout/city_menu"/>
+
+
+</menu>

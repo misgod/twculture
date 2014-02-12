@@ -16,18 +16,39 @@
  limitations under the License.
 -->
 
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/gridview"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:columnWidth="90dp"
-          android:numColumns="3"
+          android:gravity="center"
+
+          android:numColumns="1"
           android:verticalSpacing="30dp"
           android:horizontalSpacing="10dp"
           android:stretchMode="columnWidth"
-          android:gravity="center"
+
+
+
+          android:paddingTop="50dp"
+          android:paddingBottom="80dp"
+          android:orientation="vertical"
           android:background="@drawable/category_bg"
-        />
+        >
+    <Button android:id="@+id/event"
+              style="@style/front_item"
+              android:clickable="true"
+              android:onClick="onClick"
+              android:text="@string/event_category"/>
+
+    <Button android:id="@+id/place"
+              style="@style/front_item"
+              android:clickable="true"
+              android:onClick="onClick"
+              android:text="@string/place_category"/>
+
+
+
+
+    </LinearLayout>
 
 
 

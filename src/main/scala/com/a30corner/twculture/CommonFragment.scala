@@ -16,18 +16,19 @@
 
 package com.a30corner.twculture
 
-import android.support.v4.app.Fragment
+
 import util.LogUtil._
 import android.os.Bundle
 import android.widget.Toast
+import android.app.Fragment
 
 trait CommonFragment extends Fragment {
   val TAG = this.getClass.getSimpleName
   var isDestoryed = false
 
 
-  def activity: Option[CategoryActivity] =
-    if(getActivity ==null) None else Some(getActivity.asInstanceOf[CategoryActivity])
+  def activity: Option[HostActivity] =
+    if(getActivity ==null) None else Some(getActivity.asInstanceOf[HostActivity])
 
   def setTitle(t: String): Unit = activity match{
     case Some(x) => x.setTitle(t)

@@ -16,7 +16,6 @@
 
 package com.a30corner.twculture
 
-
 import android.os.{Handler, Bundle}
 
 import scala.concurrent._
@@ -41,9 +40,9 @@ import android.text.TextUtils
 import android.app.ListFragment
 
 
-object InfoListFragment {
-  def apply(c: Category): InfoListFragment = {
-    val f = new InfoListFragment()
+object PlaceListFragment {
+  def apply(c: Category): PlaceListFragment = {
+    val f = new PlaceListFragment()
     val budle = new Bundle()
     budle.putSerializable("category", c)
     f.setArguments(budle)
@@ -51,8 +50,9 @@ object InfoListFragment {
   }
 }
 
-class InfoListFragment extends ListFragment with CommonFragment {
-  lazy val adapter = new InfoAdapter()
+
+class PlaceListFragment extends ListFragment with CommonFragment {
+  lazy val adapter = new PlaceAdapter()
   lazy val options = ImageLoaderConfig.displayForList(new Handler())
   lazy val imgLoader = ImageLoader.getInstance
 
@@ -72,12 +72,12 @@ class InfoListFragment extends ListFragment with CommonFragment {
     getListView.setOnItemClickListener(adapter)
     getListView.setRecyclerListener(adapter)
 
-    setTitle(getString(R.string.event_category) + " - " + category.name)
+    setTitle(category.name)
     setHasOptionsMenu(true)
   }
 
   override def onCreateOptionsMenu(menu: Menu, inflater: MenuInflater): Unit = {
-    inflater.inflate(R.menu.main, menu)
+    inflater.inflate(R.menu.placelist, menu)
     import com.a30corner.twculture.function2OnItemSelectedListener
 
     val spinner = menu.findItem(R.id.action_location).getActionView.
@@ -106,7 +106,7 @@ class InfoListFragment extends ListFragment with CommonFragment {
 
     displayLoading(true)
 
-    val detail = OpenData.getDetail(category)
+    val detail = OpenData.getPlaces(category)
     detail onSuccess {
       case data =>
         adapter.setData(category, data)
@@ -134,7 +134,7 @@ class InfoListFragment extends ListFragment with CommonFragment {
 
   override def onOptionsItemSelected(item: MenuItem): Boolean = {
     item.getItemId match {
-      case R.id.action_search => Toast.makeText(getActivity, R.string.not_implement, Toast.LENGTH_SHORT).show()
+      case R.id.action_map => Toast.makeText(getActivity, R.string.not_implement, Toast.LENGTH_SHORT).show()
       case _ => Toast.makeText(getActivity, "cc", Toast.LENGTH_SHORT).show()
     }
 
@@ -143,13 +143,12 @@ class InfoListFragment extends ListFragment with CommonFragment {
 
   def cities: Array[String] = getActivity.getResources.getStringArray(R.array.cities)
 
-  sealed class InfoAdapter extends BaseAdapter with OnItemClickListener with RecyclerListener {
-    var data: Seq[Info] = Nil
+  sealed class PlaceAdapter extends BaseAdapter with OnItemClickListener with RecyclerListener {
+    var data: Seq[Place] = Nil
     var category: Category = null
-    var dataFiltered: Seq[Info] = Nil
 
 
-    def setData(c: Category, newdata: Seq[Info]): Unit = runOnMain {
+    def setData(c: Category, newdata: Seq[Place]): Unit = runOnMain {
       () =>
         D(TAG, s"updated=> ${newdata.size}")
         data = newdata
@@ -161,71 +160,52 @@ class InfoListFragment extends ListFragment with CommonFragment {
     def updateFilter(): Unit = {
       D(TAG, s"updateFilter ${cities(curArea)}")
 
-      if (curArea == 0) dataFiltered = data
-      else dataFiltered = data.filter(_.locations.exists(cities(curArea).contains(_)))
+      //FIXME...
+      //      if (curArea == 0) dataFiltered = data
+      //      else dataFiltered = data.filter(_.locations.exists(cities(curArea).contains(_)))
 
       notifyDataSetInvalidated()
     }
 
-    private def narrowlocation(loc: String): String =
-      if (curArea == 0) loc
-      else
-        loc filter (cities(curArea).contains(_))
 
-    override def getCount: Int = dataFiltered.size
+    override def getCount: Int = data.size
 
     override def getItemId(p: Int): Long = p
 
-    override def getItem(position: Int): AnyRef = dataFiltered(position)
+    override def getItem(position: Int): AnyRef = data(position)
 
     def newView(position: Int, cview: View, parent: ViewGroup): Unit = {
       val title = cview.findViewById(R.id.title).asInstanceOf[TextView]
-      val locations = cview.findViewById(R.id.locations).asInstanceOf[TextView]
-      val free = cview.findViewById(R.id.free).asInstanceOf[TextView]
-      val showdate = cview.findViewById(R.id.showdate).asInstanceOf[TextView]
-      val showunit = cview.findViewById(R.id.showunit).asInstanceOf[TextView]
+      val openTime = cview.findViewById(R.id.openTime).asInstanceOf[TextView]
+//      val price = cview.findViewById(R.id.price).asInstanceOf[TextView]
+      val address = cview.findViewById(R.id.address).asInstanceOf[TextView]
       val cover = cview.findViewById(R.id.cover).asInstanceOf[ImageView]
 
-      cview.setTag(ViewHolder(locations, free, title, showunit, showdate, cover))
+      cview.setTag(ViewHolder(title, address, openTime, cover))
     }
 
     def bindView(position: Int, cview: View, parent: ViewGroup): View = {
-      val info = dataFiltered(position)
+      val place = data(position)
 
       val holder = cview.getTag.asInstanceOf[ViewHolder]
-      holder.locations.setText(narrowlocation(info.locations))
-      holder.title.setText(info.title)
 
-      val isOnsale = info.showinfo exists (_.onSales)
-
-      holder.free.setText(if (isOnsale) R.string.sales else R.string.free)
-      holder.free.setBackgroundColor(if (isOnsale) Color.RED else Color.GREEN)
-
-      holder.showdate.setText(mergeDate(info.startDate, info.endDate))
-
-      val unit = info.showUnit.getOrElse(info.masterUnit)
-      if (TextUtils.isEmpty(unit)) {
-        holder.showunit.setText(R.string.no_unit)
-      } else {
-        holder.showunit.setText(unit)
-      }
-
+      holder.title.setText(place.name)
+      holder.address.setText(place.cityName + " " +  place.address)
+//      holder.price.setText(place.ticketPrice)
+      holder.openTime.setText(place.openTime)
 
       holder.cover.setImageBitmap(null) //reset
+      holder.cover.setVisibility(View.GONE)
 
-      info.imageUrl match {
+      place.representImage match {
         //TODO: too much String concat , need enhance
         case Some(url) if url.startsWith("http") =>
           imgLoader.displayImage(url, holder.cover, options, new SimpleImageLoadingListener {
             override def onLoadingComplete(url: String, view: View, img: Bitmap) =
               holder.cover.setImageBitmap(img)
+            holder.cover.setVisibility(View.VISIBLE)
           })
-        case Some(url) =>
-          imgLoader.displayImage(OpenData.cultureUrl + url, holder.cover, options, new SimpleImageLoadingListener {
-            override def onLoadingComplete(url: String, view: View, img: Bitmap) =
-              holder.cover.setImageBitmap(img)
-          })
-        case None => holder.cover.setImageResource(R.drawable.ic_empty)
+        case None => holder.cover.setVisibility(View.GONE)
       }
       cview
     }
@@ -233,26 +213,27 @@ class InfoListFragment extends ListFragment with CommonFragment {
     override def getView(position: Int, cview: View, parent: ViewGroup): View = {
       var v = cview
       if (v == null) {
-        v = getActivity.getLayoutInflater.inflate(R.layout.info, null)
+        v = getActivity.getLayoutInflater.inflate(R.layout.place, null)
         newView(position, v, parent)
       }
       bindView(position, v, parent)
     }
 
-    def onItemClick(parent: AdapterView[_], view: View, p: Int, id: Long): Unit =
-      change(DetailInfoFragment(dataFiltered(p)))
+    def onItemClick(parent: AdapterView[_], view: View, p: Int, id: Long): Unit ={
+      Toast.makeText(getActivity, "Not implement yet", Toast.LENGTH_SHORT).show()
+      //TODO
+      //      change(DetailInfoFragment(data(p)))
+    }
+
 
     def onMovedToScrapHeap(view: View): Unit =
       imgLoader.cancelDisplayTask(view.getTag.asInstanceOf[ViewHolder].cover)
   }
 
-  case class ViewHolder(
-                         locations: TextView,
-                         free: TextView,
-                         title: TextView,
-                         showunit: TextView,
-                         showdate: TextView,
-                         cover: ImageView
+  case class ViewHolder(title: TextView,
+                        address: TextView,
+                        openTime: TextView,
+                        cover: ImageView
                          )
 
 

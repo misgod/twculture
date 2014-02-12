@@ -17,7 +17,6 @@
 
 package com.a30corner.twculture
 
-
 import android.os.{Handler, Bundle}
 
 import scala.language.postfixOps
@@ -27,37 +26,30 @@ import android.widget.{LinearLayout, ImageView, TextView}
 import android.graphics.Bitmap
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener
-import android.text.{SpannableStringBuilder, SpannableString, TextUtils}
-import com.a30corner.twculture.util.{LogUtil, ImageLoaderConfig, Purify}
+import android.text.{SpannableString, TextUtils}
+import com.a30corner.twculture.util.{ImageLoaderConfig, Purify}
 import com.a30corner.twculture.util.Purify._
 
 
 import com.a30corner.twculture.util.LogUtil._
 import ViewGroup.LayoutParams.{WRAP_CONTENT, MATCH_PARENT}
-import android.text.style.{ClickableSpan, URLSpan, UnderlineSpan}
-import android.view.View.OnClickListener
+import android.text.style.URLSpan
 import android.content.Intent
 import android.net.Uri
 import android.app.Fragment
-import java.util.regex.Pattern
-import android.text.util.Linkify
-import android.text.method.LinkMovementMethod
-import java.text.SimpleDateFormat
-import java.util.Calendar
 
-
-object DetailInfoFragment {
-  def apply(info: Info): DetailInfoFragment = {
-
-    val f = new DetailInfoFragment()
+object DetailPlaceFragment {
+  def apply(place: Place): DetailPlaceFragment = {
+    val f = new DetailPlaceFragment()
     val budle = new Bundle()
-    budle.putSerializable("info", info)
+    budle.putSerializable("place", place)
     f.setArguments(budle)
     f
   }
 }
 
-class DetailInfoFragment extends Fragment {
+
+class DetailPlaceFragment extends Fragment {
   val TAG = "DetailInfoFragment"
   lazy val options = ImageLoaderConfig.displayForDetail(new Handler)
   lazy val info = getArguments.get("info").asInstanceOf[Info]
@@ -125,27 +117,15 @@ class DetailInfoFragment extends Fragment {
         val content = new SpannableString(show.locationName)
         content.setSpan(new URLSpan("#"), 0, show.locationName.length, 0)
 
-        val content1 = show.location match{
-          case Some(x)=>
-            val c = new SpannableString(x)
-            c.setSpan(new URLSpan("#"), 0, x.length, 0)
-            c
-          case None => ""
-        }
-
-
+//        val content1 = new SpannableString(show.location)
+//        content1.setSpan(new URLSpan("#"), 0, show.location.length, 0)
 
         val time = show.time.split(";").map(Purify.refineDateStr).mkString("\n")
 
-
         assign(R.id.lab_show_time, R.id.show_time, time)(view)
         assign(R.id.lab_locationName, R.id.locationName, content)(view)
-        assign(R.id.lab_location, R.id.location, content1)(view)
+//        assign(R.id.lab_location, R.id.location, content1)(view)
         assign(R.id.lab_price, R.id.price, show.price)(view)
-
-        parseDateLink(view.findViewById(R.id.show_time).asInstanceOf[TextView],show)
-
-
 
         view.findViewById(R.id.locationName).setOnClickListener {
           v: View =>
@@ -187,47 +167,5 @@ class DetailInfoFragment extends Fragment {
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, s: Bundle): View =
     inflater.inflate(R.layout.detail_info, container, false)
-
-
-  def parseDateLink(textView:TextView, show:ShowInfo) = {
-    val datestr = textView.getText
-    val builder = new SpannableStringBuilder(datestr)
-
-    """(?m)\d{4}/\d{2}/\d{2}.*$""".r.findAllMatchIn(datestr).foreach{
-      m=>
-        val start = m.start
-        val end = m.end
-        val text = datestr.subSequence(start, end).toString
-        builder.setSpan(new ClickableURLSpan(text,show.locationName), start, end, 0)
-    }
-
-    textView.setText(builder)
-    textView.setMovementMethod(LinkMovementMethod.getInstance())
-  }
-
-  class ClickableURLSpan(datetime:String,location:String) extends ClickableSpan {
-    override def onClick(widget: View): Unit = {
-      val dstr = datetime.trim
-      val allday = dstr.length == 10
-      val formatStr = if (allday) "yyyy/MM/dd" else "yyyy/MM/dd HH:mm:ss"
-      val dformat = new SimpleDateFormat(formatStr)
-
-      val date = dformat.parse(datetime)
-
-      val intent = new Intent(Intent.ACTION_EDIT)
-      intent.setType("vnd.android.cursor.item/event")
-      intent.putExtra("title", info.title)
-      intent.putExtra("description",  info.description.getOrElse("") )
-      intent.putExtra("beginTime",date.getTime)
-      intent.putExtra("allDay", allday)
-      //FIXME: endtime has problem when allday == true..
-      intent.putExtra("endTime", date.getTime)
-      intent.putExtra("eventLocation", location)
-
-      startActivity(intent)
-    }
-  }
-
-
 
 }

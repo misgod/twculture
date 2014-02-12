@@ -48,6 +48,7 @@ object DownloadHelper {
     p.future
   }
 
+
   def getHashContent(url: String): Future[String] = {
     D("getHttpContent", url)
     val p = Promise[String]()

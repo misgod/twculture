@@ -25,6 +25,7 @@ import com.a30corner.twculture.util.{LogUtil, DownloadHelper, FileUtil}
 import LogUtil._
 import android.content.Context
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.io.Source
 
 object Sync {
   def dropbox(name: String) = s"http://dl.dropboxusercontent.com/u/67374708/twculture/$name"
@@ -39,11 +40,11 @@ object Sync {
   def openFromDropbox(name: String)(implicit c: Context) = openjson(dropbox(name), c.getFileStreamPath(name))
 
   def openData(name: String, force: Boolean = false)(implicit c: Context): Future[BufferedReader] =
-    samehashWithCached(name).flatMap{
+    samehashWithCached(name).flatMap {
       case true if !force =>
-        D(TAG,s"cached: $name")
+        D(TAG, s"cached: $name")
         Future(bufreader(c.openFileInput(name)))
-      case _ =>  openFromDropbox(name)
+      case _ => openFromDropbox(name)
     }.recover {
       case _ => bufreader(c.openFileInput(name))
     }
@@ -77,5 +78,46 @@ object Sync {
 
 
   def bufreader(in: InputStream, size: Int = 8192) = new BufferedReader(new InputStreamReader(new BufferedInputStream(in, size)))
+
+}
+
+
+object ICulture {
+  def mainTypeMethod(id:String) = s"method=exportEmapJsonByMainType&mainType=$id"
+
+  def typeMethod(id:String) = s"method=exportEmapJson&typeId=$id"
+
+
+//  ?method=exportEmapJson&typeId=H
+
+  val placesCategory = Seq(
+    Category("10", "展演空間", mainTypeMethod("10")),
+    Category("11", "藝文中心", mainTypeMethod("11")),
+    Category("13", "創意園區", mainTypeMethod("13")),
+    Category("14", "藝術村", mainTypeMethod("14")),
+    Category("L", "文創商店", typeMethod("L")),
+    Category("M", "獨立書店", typeMethod("M")),
+    Category("K", "特色圖書館",  typeMethod("K")),
+    Category("I", "文化行政據點",  typeMethod("I")),
+    Category("H", "博物館",  typeMethod("H")),
+    Category("F", "公共藝術", typeMethod("F")),
+    Category("E", "文化景觀",  typeMethod("E")),
+    Category("D", "社區",  typeMethod("D")),
+    Category("C", "地方文化館",  typeMethod("C")),
+    Category("B", "工藝之家",  typeMethod("B")),
+    Category("A", "文化資產",  typeMethod("A"))
+    //  "遺址" -> "typeId=A&classifyId=2.1" ,
+    //    "聚落"->"typeId=A&classifyId=1.3",
+    //    "歷史建築"->"typeId=A&classifyId=1.2",
+    //    "古蹟"->"typeId=A&classifyId=1.1"
+  )
+
+  def url(t: String) = s"http://cloud.culture.tw/frontsite/trans/emapOpenDataAction.do?$t"
+
+
+  def getPlace(t: String): Future[BufferedReader] = Future {
+    Source.fromURL(url(t)).bufferedReader()
+  }
+
 
 }

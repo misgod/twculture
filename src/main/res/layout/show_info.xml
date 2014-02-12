@@ -28,7 +28,7 @@
 
     <TextView android:id="@+id/show_time"
               style="@style/text_item"
-              android:lineSpacingMultiplier="1.5"
+              android:lineSpacingMultiplier="2"
             />
 
 
